@@ -79,6 +79,7 @@ class PlayState extends MusicBeatState
 	public static var bads:Int = 0;
 	public static var goods:Int = 0;
 	public static var sicks:Int = 0;
+	var camMovement:Float = 0.09;
 
 	public static var songPosBG:FlxSprite;
 	public static var songPosBar:FlxBar;
@@ -1871,6 +1872,7 @@ class PlayState extends MusicBeatState
 				openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 		}
 
+		#if debug
 		if (FlxG.keys.justPressed.SEVEN)
 		{
 			#if windows
@@ -1885,6 +1887,7 @@ class PlayState extends MusicBeatState
 			}
 			#end
 		}
+		#end
 
 		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
 		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
@@ -2526,7 +2529,6 @@ class PlayState extends MusicBeatState
 
 				if (storyPlaylist.length <= 0)
 				{
-
 					if (curSong == 'Nonsense') {
 						FlxG.switchState(new VideoState("assets/videos/Credits/Credits_good.webm", new StoryMenuState()));
 					}
@@ -2595,7 +2597,7 @@ class PlayState extends MusicBeatState
 							if (storyDifficulty == 3){
 								LoadingState.loadAndSwitchState(new PlayState());
 							}
-							else if (healthBar.percent > 50) {
+							else if (accuracy > 75) {
 								LoadingState.loadAndSwitchState(new VideoState("assets/videos/Cutscene2.webm", new PlayState()));
 							}
 							else {
@@ -2605,7 +2607,7 @@ class PlayState extends MusicBeatState
 							if (storyDifficulty == 3){
 								LoadingState.loadAndSwitchState(new PlayState());
 							}
-							else if (healthBar.percent > 50) {
+							else if (accuracy > 75) {
 								LoadingState.loadAndSwitchState(new VideoState("assets/videos/Cutscene3.webm", new PlayState()));
 							}
 							else {
@@ -3545,216 +3547,644 @@ class PlayState extends MusicBeatState
 		{
 			// dad.dance();
 		}
-		switch (curSong) 
-		{
+		//The camera stuff lol
+		switch (curSong){
 			case 'Common Sense':
-				
-				switch (curStep)
-				{
-					case 1:
-						boyfriend.frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
-						boyfriend.animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, true);
-						boyfriend.animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, true);
-						boyfriend.animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, true);
-						boyfriend.animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, true);
-						boyfriend.animation.addByPrefix('singintro', 'BF gun away', 24, false);
-						boyfriend.addOffset("idle", 77, 15);
-						boyfriend.addOffset("singUPmiss", -29, 27);
-						boyfriend.addOffset("singRIGHTmiss", -30, 21);
-						boyfriend.addOffset("singLEFTmiss", 12, 24);
-						boyfriend.addOffset("singDOWNmiss", -11, -19);
-						boyfriend.addOffset("singintro", 77, 15);
-						boyfriend.playAnim('singintro');
-						add(boyfriend);
-					case 16:
-						remove(boyfriend);
-						boyfriend = new Boyfriend(1100, 450, 'bf');
-						add(boyfriend);
+				switch (curStep){
+					case 512:
+						camMovement = 0.02;
+						defaultCamZoom = 1.0;
+					case 518:
+						camMovement = 0.09;
+						defaultCamZoom = 0.7;
+						FlxG.camera.flash(FlxColor.WHITE, 0.2);
+						shakeCam = true;
+					case 522:
+						shakeCam = false;
+					case 550:
+						camMovement = 0.09;
+						defaultCamZoom = 1.0;
+					case 566:
+						camMovement = 0.09;
+						defaultCamZoom = 0.95;
+					case 572:
+						camMovement = 0.09;
+						defaultCamZoom = 0.87;
+					case 578:
+						camMovement = 0.09;
+						defaultCamZoom = 0.8;
+					case 582:
+						camMovement = 0.09;
+						defaultCamZoom = 0.8;
+					case 588:
+						camMovement = 0.01;
+						defaultCamZoom = 1.0;
+					case 598:
+						camMovement = 0.09;
+						defaultCamZoom = 0.7;
+					case 614:
+						camMovement = 0.09;
+						defaultCamZoom = 0.8;
+					case 628:
+						camMovement = 0.01;
+						defaultCamZoom = 0.87;
+					case 632:
+						camMovement = 0.01;
+						defaultCamZoom = 0.95;
+					case 636:
+						camMovement = 0.01;
+						defaultCamZoom = 1.0;
+					case 640:
+						camMovement = 0.01;
+						defaultCamZoom = 1.0;
+					case 646:
+						camMovement = 0.09;
+						defaultCamZoom = 0.8;
+					case 774:
+						camMovement = 0.09;
+						defaultCamZoom = 1.0;
+					case 790:
+						camMovement = 0.09;
+						defaultCamZoom = 0.8;
 				}
 			case 'Highlights':
-				
-				switch (curStep)
-				{
-					case 578:
-						if (healthBar.percent > 60) {
-							remove(dad);
-							dad.frames = Paths.getSparrowAtlas('Nonsense/Nonsense');
-							dad.animation.addByPrefix('awwheckno', 'oh no', 24, false);
-							dad.addOffset("danceRight", -8, -4);
-							dad.addOffset("danceLeft", -8, -4);
-							dad.addOffset("awwheckno", -8, -4);
-							dad.playAnim('awwheckno');
-							add(dad);
-						}
-						else {
-							remove(dad);
-							dad.frames = Paths.getSparrowAtlas('Nonsense/Nonsense');
-							dad.animation.addByPrefix('bruh', 'Bruh', 24, false);
-							dad.addOffset("danceRight", -8, -5);
-							dad.addOffset("danceLeft", -8, -5);
-							dad.addOffset("bruh", -8, -5);
-							dad.playAnim('bruh');
-							add(dad);
-						}
-					case 595:
-						if (dad.animation.curAnim.name.startsWith("awwheckno"))
-						{
-							remove(dad);
-							dad = new Character(100, 100, 'nonsense-tired');
-							dad.y += 100;
-							add(dad);
-						}
-						if (dad.animation.curAnim.name.startsWith("bruh")) {
-							remove(dad);
-							dad = new Character(100, 100, 'nonsense');
-							dad.y += 100;
-							add(dad);
-						}	
+				switch (curStep) {
+					case 20:
+							camMovement = 0.09;
+							defaultCamZoom = 0.7;
+						case 35:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 235:
+							camMovement = 0.09;
+							defaultCamZoom = 1.0;
+						case 243:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+							FlxG.camera.flash(FlxColor.WHITE, 0.2);
+							shakeCam = true;
+						case 246:
+							shakeCam = false;
+						case 255:
+							camMovement = 0.09;
+							defaultCamZoom = 0.9;
+						case 267:
+							camMovement = 0.09;
+							defaultCamZoom = 1.0;
+						case 274:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 371:
+							camMovement = 0.09;
+							defaultCamZoom = 0.9;
+						case 387:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 467:
+							camMovement = 0.02;
+								new FlxTimer().start(0.1, function(tmr:FlxTimer)
+								{
+									defaultCamZoom += 0.01;
+									if (defaultCamZoom < 1.0)
+									{
+										tmr.reset(0.1);
+									}
+									else
+									{
+										//add(garsmoke);
+										trace('elcamera do good');
+									}
+								});
+						case 499:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+							FlxG.camera.flash(FlxColor.WHITE, 0.2);
+							shakeCam = true;
+						case 503:
+							shakeCam = false;
+						case 513:
+							camMovement = 0.09;
+							defaultCamZoom = 0.9;
+						case 523:
+							camMovement = 0.09;
+							defaultCamZoom = 1.0;
+						case 530:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 621:
+							camMovement = 0.02;
+							new FlxTimer().start(0.1, function(tmr:FlxTimer)
+							{
+								defaultCamZoom += 0.04;
+								if (defaultCamZoom < 1.0)
+								{
+									tmr.reset(0.1);
+								}
+								else
+								{
+									//add(garsmoke);
+									trace('elcamera do good');
+								}
+							});
+							shakeCam = true;
+						case 627:
+							camMovement = 0.09;
+							defaultCamZoom = 0.7;
+							FlxG.camera.flash(FlxColor.WHITE, 0.2);
+						case 631:
+							shakeCam = false;
+						case 643:
+							camMovement = 0.09;
+							defaultCamZoom = 0.9;
+						case 659:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 729:
+							camMovement = 0.09;
+							defaultCamZoom = 0.7;
+						case 739:
+							camMovement = 0.09;
+							defaultCamZoom = 0.9;
+						case 755:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 819:
+							camMovement = 0.09;
+							defaultCamZoom = 0.7;
+							FlxG.camera.flash(FlxColor.WHITE, 0.2);
+							shakeCam = true;
+						case 823:
+							shakeCam = false;
+						case 835:
+							camMovement = 0.09;
+							defaultCamZoom = 0.9;
+						case 851:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 883:
+							camMovement = 0.09;
+							defaultCamZoom = 0.7;
+						case 899:
+							camMovement = 0.09;
+							defaultCamZoom = 0.9;
+						case 915:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 945:
+							camMovement = 0.09;
+							defaultCamZoom = 0.7;
+							FlxG.camera.flash(FlxColor.WHITE, 0.2);
+							shakeCam = true;
+						case 949:
+							shakeCam = false;
+						case 963:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
 				}
 			case 'Context':	
-				switch (curStep)
-				{
-					case 322:
-						if (healthBar.percent > 80) {
-							remove(boyfriend);
+				switch (curStep){
+					case 1:
+							camMovement = 0.02;
+							defaultCamZoom = 1.0;
+						case 19:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 51:
+							camMovement = 0.09;
+							defaultCamZoom = 1.0;
+						case 63:
+							camMovement = 0.09;
+							defaultCamZoom = 0.7;
+						case 75:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 83:
+							camMovement = 0.09;
+							defaultCamZoom = 1.0;
+						case 95:
+							camMovement = 0.09;
+							defaultCamZoom = 0.7;
+						case 107:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 115:
+							camMovement = 0.09;
+							defaultCamZoom = 0.7;
+							FlxG.camera.flash(FlxColor.WHITE, 0.2);
+							shakeCam = true;
+						case 119:
+							shakeCam = false;
+						case 147:
+							camMovement = 0.09;
+							defaultCamZoom = 1.0;
+						case 179:
+							camMovement = 0.09;
+							defaultCamZoom = 0.7;
+						case 195:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 211:
+							camMovement = 0.09;
+							defaultCamZoom = 1.0;
+						case 223:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 307:
+							camMovement = 0.09;
+							defaultCamZoom = 0.7;
+						case 377:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 467:
+							camMovement = 0.09;
+							defaultCamZoom = 0.9;
+						case 499:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 626:
+							camMovement = 0.09;
+							defaultCamZoom = 0.7;
+							FlxG.camera.flash(FlxColor.WHITE, 0.2);
+							shakeCam = true;
+						case 630:
+							shakeCam = false;
+						case 643:
+							camMovement = 0.09;
+							defaultCamZoom = 1.0;
+						case 655:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 677:
+							camMovement = 0.09;
+							defaultCamZoom = 1.0;
+						case 691:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 773:
+							camMovement = 0.09;
+							defaultCamZoom = 1.0;
+						case 787:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 819:
+							camMovement = 0.09;
+							defaultCamZoom = 0.7;
+						case 883:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
+						case 948:
+							FlxG.camera.flash(FlxColor.WHITE, 0.2);
+							shakeCam = true;
+							camMovement = 0.02;
+							defaultCamZoom = 1.0;
+						case 952:
+							shakeCam = false;
+						case 1011:
+							new FlxTimer().start(0.1, function(tmr:FlxTimer)
+							{
+								defaultCamZoom -= 0.04;
+								if (defaultCamZoom > 0.8)
+								{
+									tmr.reset(0.1);
+								}
+								else
+								{
+									//add(garsmoke);
+									trace('elcamera do good');
+								}
+							});
+				}
+				
+		}
+		//animation Script Events
+		if (!FlxG.save.data.event){
+			switch (curSong) 
+			{
+				case 'Common Sense':
+					
+					switch (curStep)
+					{
+						case 1:
 							boyfriend.frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
 							boyfriend.animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, true);
 							boyfriend.animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, true);
 							boyfriend.animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, true);
 							boyfriend.animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, true);
-							boyfriend.animation.addByPrefix('singlol', 'lookatdis', 24, false);
-							boyfriend.addOffset("idle", 18, 11);
+							boyfriend.animation.addByPrefix('singintro', 'BF gun away', 24, false);
+							boyfriend.addOffset("idle", 77, 15);
 							boyfriend.addOffset("singUPmiss", -29, 27);
 							boyfriend.addOffset("singRIGHTmiss", -30, 21);
 							boyfriend.addOffset("singLEFTmiss", 12, 24);
 							boyfriend.addOffset("singDOWNmiss", -11, -19);
-							boyfriend.addOffset("singlol", 18, 11);
-							boyfriend.playAnim('singlol');
+							boyfriend.addOffset("singintro", 77, 15);
+							boyfriend.playAnim('singintro');
 							add(boyfriend);
-						}
-						if (healthBar.percent < 35)
-						{
-							remove(boyfriend);
-							boyfriend.frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
-							boyfriend.animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, true);
-							boyfriend.animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, true);
-							boyfriend.animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, true);
-							boyfriend.animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, true);
-							boyfriend.animation.addByPrefix('singfrick', 'BF bruh', 24, false);
-							boyfriend.addOffset("idle", -1, -9);
-							boyfriend.addOffset("singUPmiss", -29, 27);
-							boyfriend.addOffset("singRIGHTmiss", -30, 21);
-							boyfriend.addOffset("singLEFTmiss", 12, 24);
-							boyfriend.addOffset("singDOWNmiss", -11, -19);
-							boyfriend.addOffset('singfrick', -1, -9);
-							boyfriend.playAnim('singfrick');
-							add(boyfriend);
-						}
-					case 338:
-						if (boyfriend.animation.curAnim.name.startsWith("sing")) {
+						case 16:
 							remove(boyfriend);
 							boyfriend = new Boyfriend(1100, 450, 'bf');
 							add(boyfriend);
-						}
-					case 588:
-						if (healthBar.percent > 60) {
+					}
+				case 'Highlights':
+					
+					switch (curStep)
+					{
+						case 578:
+							if (accuracy > 75) {
+								camMovement = 0.02;
+								defaultCamZoom = 1.0;
+								remove(dad);
+								dad.frames = Paths.getSparrowAtlas('Nonsense/Nonsense');
+								dad.animation.addByPrefix('awwheckno', 'oh no', 24, false);
+								dad.addOffset("danceRight", -8, -4);
+								dad.addOffset("danceLeft", -8, -4);
+								dad.addOffset("awwheckno", -8, -4);
+								dad.playAnim('awwheckno');
+								add(dad);
+							}
+							else {
+								camMovement = 0.02;
+								defaultCamZoom = 1.0;
+								remove(dad);
+								dad.frames = Paths.getSparrowAtlas('Nonsense/Nonsense');
+								dad.animation.addByPrefix('bruh', 'Bruh', 24, false);
+								dad.addOffset("danceRight", -8, -5);
+								dad.addOffset("danceLeft", -8, -5);
+								dad.addOffset("bruh", -8, -5);
+								dad.playAnim('bruh');
+								add(dad);
+							}
+						case 595:
+							if (dad.animation.curAnim.name.startsWith("awwheckno"))
+							{
+								camMovement = 0.09;
+								defaultCamZoom = 0.8;
+								remove(dad);
+								dad = new Character(100, 100, 'nonsense-tired');
+								dad.y += 100;
+								add(dad);
+							}
+							if (dad.animation.curAnim.name.startsWith("bruh")) {
+								camMovement = 0.09;
+								defaultCamZoom = 0.8;
+								//camZooming = false;
+								remove(dad);
+								dad = new Character(100, 100, 'nonsense');
+								dad.y += 100;
+								add(dad);
+							}	
+					}
+				case 'Context':	
+					switch (curStep)
+					{
+						case 322:
+							if (accuracy > 90) {
+								camMovement = 0.02;
+								new FlxTimer().start(0.1, function(tmr:FlxTimer)
+								{
+									defaultCamZoom += 0.04;
+									if (defaultCamZoom < 1.0)
+									{
+										tmr.reset(0.1);
+									}
+									else
+									{
+										//add(garsmoke);
+										trace('elcamera do good');
+									}
+								});
+								remove(boyfriend);
+								boyfriend.frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
+								boyfriend.animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, true);
+								boyfriend.animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, true);
+								boyfriend.animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, true);
+								boyfriend.animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, true);
+								boyfriend.animation.addByPrefix('singlol', 'lookatdis', 24, false);
+								boyfriend.addOffset("idle", 18, 11);
+								boyfriend.addOffset("singUPmiss", -29, 27);
+								boyfriend.addOffset("singRIGHTmiss", -30, 21);
+								boyfriend.addOffset("singLEFTmiss", 12, 24);
+								boyfriend.addOffset("singDOWNmiss", -11, -19);
+								boyfriend.addOffset("singlol", 18, 11);
+								boyfriend.playAnim('singlol');
+								add(boyfriend);
+							}
+							if (accuracy < 70)
+							{
+								camMovement = 0.02;
+								new FlxTimer().start(0.1, function(tmr:FlxTimer)
+								{
+									defaultCamZoom += 0.04;
+									if (defaultCamZoom < 1.0)
+									{
+										tmr.reset(0.1);
+									}
+									else
+									{
+										//add(garsmoke);
+										trace('elcamera do good');
+									}
+								});
+								remove(boyfriend);
+								boyfriend.frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
+								boyfriend.animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, true);
+								boyfriend.animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, true);
+								boyfriend.animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, true);
+								boyfriend.animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, true);
+								boyfriend.animation.addByPrefix('singfrick', 'BF bruh', 24, false);
+								boyfriend.addOffset("idle", -1, -9);
+								boyfriend.addOffset("singUPmiss", -29, 27);
+								boyfriend.addOffset("singRIGHTmiss", -30, 21);
+								boyfriend.addOffset("singLEFTmiss", 12, 24);
+								boyfriend.addOffset("singDOWNmiss", -11, -19);
+								boyfriend.addOffset('singfrick', -1, -9);
+								boyfriend.playAnim('singfrick');
+								add(boyfriend);
+							}
+						case 338:
+							if (boyfriend.animation.curAnim.name.startsWith("sing")) {
+								camMovement = 0.09;
+								defaultCamZoom = 0.7;
+								remove(boyfriend);
+								boyfriend = new Boyfriend(1100, 450, 'bf');
+								add(boyfriend);
+							}
+						case 578:
+							if (accuracy > 75){
+								camMovement = 0.02;
+								new FlxTimer().start(0.1, function(tmr:FlxTimer)
+								{
+									defaultCamZoom += 0.04;
+									if (defaultCamZoom < 1.0)
+									{
+										tmr.reset(0.1);
+									}
+									else
+									{
+										//add(garsmoke);
+										trace('elcamera do good');
+									}
+								});
+							}
+						case 588:
+							if (accuracy > 75) {
+								remove(boyfriend);
+								boyfriend.frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
+								boyfriend.animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, true);
+								boyfriend.animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, true);
+								boyfriend.animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, true);
+								boyfriend.animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, true);
+								boyfriend.animation.addByPrefix('singdab', 'BF dab', 24, false);
+								boyfriend.addOffset("idle", -2);
+								boyfriend.addOffset("singUPmiss", -29, 27);
+								boyfriend.addOffset("singRIGHTmiss", -30, 21);
+								boyfriend.addOffset("singLEFTmiss", 12, 24);
+								boyfriend.addOffset("singDOWNmiss", -11, -19);
+								boyfriend.addOffset('singdab', -2);
+								boyfriend.playAnim('singdab');
+								add(boyfriend);
+							}
+						case 594:
+							if (boyfriend.animation.curAnim.name.startsWith("sing")){
+								camMovement = 0.09;
+								defaultCamZoom = 0.8;
+								remove(boyfriend);
+								boyfriend = new Boyfriend(1100, 450, 'bf');
+								add(boyfriend);
+							}
+						case 610:
+							if (accuracy > 75) {
+								camMovement = 0.02;
+								new FlxTimer().start(0.1, function(tmr:FlxTimer)
+								{
+									defaultCamZoom += 0.04;
+									if (defaultCamZoom < 1.0)
+									{
+										tmr.reset(0.1);
+									}
+									else
+									{
+										//add(garsmoke);
+										trace('elcamera do good');
+									}
+								});
+								remove(dad);
+								dad.frames = Paths.getSparrowAtlas('Nonsense/Nonsense_Pissed');
+								dad.animation.addByPrefix('mad', 'pissed mid-song', 24, false);
+								dad.addOffset("idle", 6, 0);
+								dad.addOffset("mad", 6, 0);
+								dad.playAnim('mad');
+								add(dad);
+							}
+							else {
+								camMovement = 0.02;
+								new FlxTimer().start(0.1, function(tmr:FlxTimer)
+								{
+									defaultCamZoom += 0.04;
+									if (defaultCamZoom < 1.0)
+									{
+										tmr.reset(0.1);
+									}
+									else
+									{
+										//add(garsmoke);
+										trace('elcamera do good');
+									}
+								});
+								remove(dad);
+								dad.frames = Paths.getSparrowAtlas('Nonsense/Nonsense_Pissed');
+								dad.animation.addByPrefix('hahahlol', 'takethat', 24, false);
+								dad.addOffset("idle", 6, 2);
+								dad.addOffset("hahahlol", 6, 2);
+								dad.playAnim('hahahlol');
+								add(dad);
+							}
+						case 626:
+							if (dad.animation.curAnim.name.startsWith("mad")) {
+								remove(dad);
+								dad = new Character(100, 100, 'nonsense-mad');
+								dad.y += 100;
+								dad.x += 20;
+								add(dad);
+							}
+							if (dad.animation.curAnim.name.startsWith("hahahlol")) {
+								remove(dad);
+								dad = new Character(100, 100, 'nonsense-pissed');
+								dad.y += 100;
+								dad.x += 20;
+								add(dad);
+							}
+						case 948:
+							if (isStoryMode && accuracy > 75 && storyDifficulty == 2) {
+								remove(dad);
+								dad.frames = Paths.getSparrowAtlas('Nonsense/Nonsense_Pissed');
+								dad.animation.addByPrefix('absolutePAIN', 'Lol he pissed', 24, true);
+								dad.addOffset("danceLeft", 0, -50);
+								dad.addOffset("danceRight", 0, -50);
+								dad.addOffset("absolutePAIN", 0, -50);
+								dad.playAnim('absolutePAIN', true);
+								add(dad);
+							}
+					}
+				case 'Nonsense':
+					switch (curStep)
+					{
+						case 16:
+							camMovement = 0.02;
+							new FlxTimer().start(0.1, function(tmr:FlxTimer)
+							{
+								defaultCamZoom += 0.04;
+								if (defaultCamZoom < 1.0)
+								{
+									tmr.reset(0.1);
+								}
+								else
+								{
+									//add(garsmoke);
+									trace('elcamera do good');
+								}
+							});
+							FlxG.camera.flash(FlxColor.WHITE, 0.2);
 							remove(boyfriend);
 							boyfriend.frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
-							boyfriend.animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, true);
-							boyfriend.animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, true);
-							boyfriend.animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, true);
-							boyfriend.animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, true);
-							boyfriend.animation.addByPrefix('singdab', 'BF dab', 24, false);
-							boyfriend.addOffset("idle", -2);
-							boyfriend.addOffset("singUPmiss", -29, 27);
-							boyfriend.addOffset("singRIGHTmiss", -30, 21);
-							boyfriend.addOffset("singLEFTmiss", 12, 24);
-							boyfriend.addOffset("singDOWNmiss", -11, -19);
-							boyfriend.addOffset('singdab', -2);
-							boyfriend.playAnim('singdab');
+							boyfriend.animation.addByPrefix('idle', 'BF hit', 24, false);
+							boyfriend.addOffset('idle', 24, 20);
+							boyfriend.addOffset("singUPmiss", 24, 20);
+							boyfriend.addOffset("singRIGHTmiss", 24, 20);
+							boyfriend.addOffset("singLEFTmiss", 24, 20);
+							boyfriend.addOffset("singDOWNmiss", 24, 20);
+							boyfriend.playAnim('idle');
 							add(boyfriend);
-						}
-					case 594:
-						if (boyfriend.animation.curAnim.name.startsWith("sing")){
+							shakeCam = true;
+						case 20:
+							shakeCam = false;
+						case 48:
+							camMovement = 0.09;
+							defaultCamZoom = 0.8;
 							remove(boyfriend);
 							boyfriend = new Boyfriend(1100, 450, 'bf');
 							add(boyfriend);
-						}
-					case 610:
-						if (healthBar.percent > 60) {
-							remove(dad);
-							dad.frames = Paths.getSparrowAtlas('Nonsense/Nonsense_Pissed');
-							dad.animation.addByPrefix('mad', 'pissed mid-song', 24, false);
-							dad.addOffset("idle", 6, 0);
-							dad.addOffset("mad", 6, 0);
-							dad.playAnim('mad');
-							add(dad);
-						}
-						else {
-							remove(dad);
-							dad.frames = Paths.getSparrowAtlas('Nonsense/Nonsense_Pissed');
-							dad.animation.addByPrefix('hahahlol', 'takethat', 24, false);
-							dad.addOffset("idle", 6, 2);
-							dad.addOffset("hahahlol", 6, 2);
-							dad.playAnim('hahahlol');
-							add(dad);
-						}
-					case 626:
-						if (dad.animation.curAnim.name.startsWith("mad")) {
-							remove(dad);
-							dad = new Character(100, 100, 'nonsense-mad');
-							dad.y += 100;
-							dad.x += 20;
-							add(dad);
-						}
-						if (dad.animation.curAnim.name.startsWith("hahahlol")) {
-							remove(dad);
-							dad = new Character(100, 100, 'nonsense-pissed');
-							dad.y += 100;
-							dad.x += 20;
-							add(dad);
-						}
-					case 948:
-						if (isStoryMode && healthBar.percent > 50 && storyDifficulty == 2) {
-							remove(dad);
-							dad.frames = Paths.getSparrowAtlas('Nonsense/Nonsense_Pissed');
-							dad.animation.addByPrefix('absolutePAIN', 'Lol he pissed', 24, true);
-							dad.addOffset("danceLeft", 0, -50);
-							dad.addOffset("danceRight", 0, -50);
-							dad.addOffset("absolutePAIN", 0, -50);
-							dad.playAnim('absolutePAIN', true);
-							add(dad);
-						}
-				}
-			case 'Nonsense':
-				switch (curStep)
-				{
-					case 16:
-						FlxG.camera.flash(FlxColor.WHITE, 0.2);
-						remove(boyfriend);
-						boyfriend.frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
-						boyfriend.animation.addByPrefix('idle', 'BF hit', 24, false);
-						boyfriend.addOffset('idle', 24, 20);
-						boyfriend.addOffset("singUPmiss", 24, 20);
-						boyfriend.addOffset("singRIGHTmiss", 24, 20);
-						boyfriend.addOffset("singLEFTmiss", 24, 20);
-						boyfriend.addOffset("singDOWNmiss", 24, 20);
-						boyfriend.playAnim('idle');
-						add(boyfriend);
-						shakeCam = true;
-					case 18:
-						shakeCam = false;
-					case 48:
-						remove(boyfriend);
-						boyfriend = new Boyfriend(1100, 450, 'bf');
-						add(boyfriend);
-					case 350:
-						dad.frames = Paths.getSparrowAtlas('Nonsense/Nonsense_God');
-						dad.animation.addByPrefix('idle', 'die god', 24, false);
-						dad.addOffset("idle", 718, 302);
-						dad.playAnim('idle');
-						add(dad);	
-				}
+						case 350:
+							dad.frames = Paths.getSparrowAtlas('Nonsense/Nonsense_God');
+							dad.animation.addByPrefix('idle', 'die god', 24, false);
+							dad.addOffset("idle", 718, 302);
+							dad.playAnim('idle');
+							add(dad);	
+					}
+			}
+		}
+		else{
+			switch (curSong) 
+			{
+				case 'Common Sense':
+					
+					switch (curStep)
+					{
+						case 1:
+							remove(boyfriend);
+							boyfriend = new Boyfriend(1100, 450, 'bf');
+							add(boyfriend);
+					}
+			}
 		}
 
 		// yes this updates every step.
@@ -3820,7 +4250,6 @@ class PlayState extends MusicBeatState
 			FlxG.camera.zoom += 0.015;
 			camHUD.zoom += 0.03;
 		}
-
 		if (camZooming && FlxG.camera.zoom < 1.35 && curBeat % 4 == 0)
 		{
 			FlxG.camera.zoom += 0.015;

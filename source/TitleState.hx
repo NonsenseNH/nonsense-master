@@ -402,9 +402,8 @@ class TitleState extends MusicBeatState
 				else
 					createCoolText(['Made', 'by']);
 			case 7:
-				if (Main.watermarks){
-					addMoreText('This Idiot');
-					ngSpr.visible = true;
+				if (FlxG.random.bool(50)) {
+					addMoreText('Nonsense duh');
 				}
 				else
 				{
